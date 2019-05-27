@@ -121,9 +121,6 @@ else
   fi
 
   echo "Starting the Minecraft server..."
-  JVM_OPTS="-Xms${INIT_MEMORY} -Xmx${MAX_MEMORY} ${JVM_OPTS}"
-  if isTrue ${DEBUG_EXEC}; then
-    set -x
-  fi
-  exec mc-server-runner ${bootstrapArgs} ${mcServerRunnerArgs} java $JVM_XX_OPTS $JVM_OPTS $expandedDOpts -jar $SERVER "$@" $EXTRA_ARGS
+  JVM_OPTS="-Xms1G -Xmx3G ${JVM_OPTS}"
+  exec mc-server-runner ${bootstrapArgs} ${mcServerRunnerArgs} java -Xms256M -Xmx2G -Dfml.ignorePatchDiscrepancies=true -Dfml.ignoreInvalidMinecraftCertificates=true -XX:+UseFastAccessorMethods -XX:+UseCompressedOops -XX:+OptimizeStringConcat -XX:+AggressiveOpts -XX:ReservedCodeCacheSize=2048m -XX:+UseCodeCacheFlushing -XX:SoftRefLRUPolicyMSPerMB=10000 -XX:ParallelGCThreads=10 -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+UseNUMA -XX:+CMSParallelRemarkEnabled -XX:MaxTenuringThreshold=15 -XX:MaxGCPauseMillis=30 -XX:GCPauseIntervalMillis=150 -XX:+UseAdaptiveGCBoundary -XX:-UseGCOverheadLimit -XX:+UseBiasedLocking -XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -jar $SERVER "$@" $EXTRA_ARGS
 fi
